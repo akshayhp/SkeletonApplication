@@ -28,6 +28,20 @@ dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.appcompat:appcompat:1.0.2"
     implementation "androidx.core:core-ktx:${rootProject.ext.supportlib_version}"
+
+
+    implementation "io.reactivex.rxjava2:rxkotlin:${rootProject.ext.rx_kotlin_version}"
+    implementation "io.reactivex.rxjava2:rxandroid:${rootProject.ext.rx_android_version}"
+
+    implementation "com.jakewharton.rxbinding3:rxbinding-core:${rootProject.ext.rx_binding}"
+    implementation "com.jakewharton.rxbinding3:rxbinding-appcompat:${rootProject.ext.rx_binding}"
+    implementation "com.jakewharton.rxbinding3:rxbinding-drawerlayout:${rootProject.ext.rx_binding}"
+    implementation "com.jakewharton.rxbinding3:rxbinding-leanback:${rootProject.ext.rx_binding}"
+    implementation "com.jakewharton.rxbinding3:rxbinding-recyclerview:${rootProject.ext.rx_binding}"
+    implementation "com.jakewharton.rxbinding3:rxbinding-slidingpanelayout:${rootProject.ext.rx_binding}"
+    implementation "com.jakewharton.rxbinding3:rxbinding-swiperefreshlayout:${rootProject.ext.rx_binding}"
+    implementation "com.jakewharton.rxbinding3:rxbinding-viewpager:${rootProject.ext.rx_binding}"
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation "androidx.test:runner:${rootProject.ext.supportlib_version}"
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
