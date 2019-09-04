@@ -5,14 +5,14 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    compileSdkVersion rootProject.ext.compile_sdk
+    buildToolsVersion rootProject.ext.build_tool
     defaultConfig {
-        applicationId "com.fallenapps.skeletonapp"
-        minSdkVersion 15
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        applicationId rootProject.ext.app_id
+        minSdkVersion rootProject.ext.sdk_minimum
+        targetSdkVersion rootProject.ext.sdk_target
+        versionCode rootProject.ext.app_code
+        versionName rootProject.ext.app_version
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -26,9 +26,9 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.core:core-ktx:1.0.2'
+    implementation "androidx.appcompat:appcompat:1.0.2"
+    implementation "androidx.core:core-ktx:${rootProject.ext.supportlib_version}"
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation "androidx.test:runner:${rootProject.ext.supportlib_version}"
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
