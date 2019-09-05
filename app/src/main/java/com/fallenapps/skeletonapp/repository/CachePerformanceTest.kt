@@ -13,13 +13,21 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 class CachePerformanceTest{
 
       private val  retrofitClient:Retrofit by lazy {
-          Retrofit.Builder().client(OkHttpClient.Builder().addInterceptor{chain -> Log.d("url",chain.request().url.toString())
-           chain.proceed(chain.request())}.build()).addCallAdapterFactory(RxJava2CallAdapterFactory.create()).baseUrl("https://reqres.in/api/").addConverterFactory(ScalarsConverterFactory.create()).build()
+          Retrofit.Builder()
+              .client(OkHttpClient.Builder()
+                  .addInterceptor{chain -> Log.d("url",chain.request().url.toString())
+                                            chain.proceed(chain.request())}.build())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+              .baseUrl("https://reqres.in/api/")
+              .addConverterFactory(ScalarsConverterFactory.create()).build()
     }
     private val apiService:DummyApiInterface by lazy {
         retrofitClient.create(DummyApiInterface::class.java)
     }
     fun getList():Single<String>{
-        return Single.just("").flatMap {  apiService.getList() }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        return Single.just("")
+            .flatMap {  apiService.getList() }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 }
