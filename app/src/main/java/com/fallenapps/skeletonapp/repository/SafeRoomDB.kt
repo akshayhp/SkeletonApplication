@@ -8,7 +8,7 @@ import androidx.sqlite.db.SupportSQLiteOpenHelper
 import com.commonsware.cwac.saferoom.SafeHelperFactory
 import com.fallenapps.skeletonapp.model.DataItem
 
-class SafeRoomRepository  constructor(val ctxt: Context, val passphrase: CharArray) {
+class SafeRoomDB  constructor(val ctxt: Context, val passphrase: CharArray) {
 
     private  lateinit var db: SupportSQLiteDatabase
 

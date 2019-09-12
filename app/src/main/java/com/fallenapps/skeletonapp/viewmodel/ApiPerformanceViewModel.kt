@@ -6,12 +6,12 @@ import androidx.lifecycle.*
 import com.fallenapps.skeletonapp.model.ApiResponse
 import com.fallenapps.skeletonapp.model.ControllerModel
 import com.fallenapps.skeletonapp.repository.CachePerformanceTest
-import com.fallenapps.skeletonapp.repository.PersistantCacheRepository
-import com.fallenapps.skeletonapp.repository.SafeRoomRepository
+import com.fallenapps.skeletonapp.repository.SafeRoomCacheRepository
+import com.fallenapps.skeletonapp.repository.SafeRoomDB
 
 
 
-class ApiPerformanceViewModel(app:Application, val safeRoom:SafeRoomRepository) : AndroidViewModel(app) {
+class ApiPerformanceViewModel(app:Application, val safeRoom:SafeRoomDB) : AndroidViewModel(app) {
 
     private val mLiveData: MutableLiveData<ArrayList<ApiResponse>> = MutableLiveData()
     private val mControlerState = MutableLiveData<ControllerModel>()
@@ -31,10 +31,9 @@ class ApiPerformanceViewModel(app:Application, val safeRoom:SafeRoomRepository) 
 
 
     fun request() {
-
         mControlerState.value!!.isReady=false
         val sentTime = System.currentTimeMillis()
-        var repo = CachePerformanceTest(if(mControlerState.value!!.isCacheEnable) PersistantCacheRepository(safeRoom) else null)
+        var repo = CachePerformanceTest(if(mControlerState.value!!.isCacheEnable) SafeRoomCacheRepository(safeRoom) else null)
 
             val observer = if(mControlerState.value!!.isApiSmall)repo.getTags()else repo.getList()
 
@@ -87,7 +86,7 @@ class ApiPerformanceViewModel(app:Application, val safeRoom:SafeRoomRepository) 
     }
 
 
-    class Factory(val app: Application, val safeRoom: SafeRoomRepository) :
+    class Factory(val app: Application, val safeRoom: SafeRoomDB) :
         ViewModelProvider.NewInstanceFactory() {
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
