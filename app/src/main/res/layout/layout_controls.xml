@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:padding="10dp"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -14,7 +13,7 @@
         app:layout_constraintBaseline_toBaselineOf="@id/switch1"
         app:layout_constraintLeft_toLeftOf="parent" />
 
-    <Switch
+    <ToggleButton
         android:id="@+id/switch1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,14 +34,14 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="@id/switch2"/>
 
-    <Switch
+    <ToggleButton
         android:id="@+id/switch2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textOn="Db"
         android:layout_marginTop="10dp"
 
-        android:textOff="OKHttp"
+        android:textOff="NoCache"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toRightOf="@id/switch1"
         app:layout_constraintTop_toBottomOf="@id/switch1" />
@@ -56,7 +55,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="@id/switch3" />
 
-    <Switch
+    <ToggleButton
         android:id="@+id/switch3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -9,4 +9,8 @@ interface DummyApiInterface {
     fun getList():
             Single<retrofit2.Response<String>>
 
+    @GET("tag")
+    fun getTags():
+            Single<retrofit2.Response<String>>
+
 }

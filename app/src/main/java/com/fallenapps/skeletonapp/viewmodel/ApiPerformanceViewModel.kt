@@ -8,20 +8,16 @@ import com.fallenapps.skeletonapp.model.ControllerModel
 import com.fallenapps.skeletonapp.repository.CachePerformanceTest
 import com.fallenapps.skeletonapp.repository.PersistantCacheRepository
 import com.fallenapps.skeletonapp.repository.SafeRoomRepository
-import io.reactivex.Single
-import io.reactivex.functions.Consumer
+
 
 
 class ApiPerformanceViewModel(app:Application, val safeRoom:SafeRoomRepository) : AndroidViewModel(app) {
 
-
     private val mLiveData: MutableLiveData<ArrayList<ApiResponse>> = MutableLiveData()
     private val mControlerState = MutableLiveData<ControllerModel>()
 
-
     val liveData: LiveData<ArrayList<ApiResponse>> = mLiveData
     val controlerState: LiveData<ControllerModel> = mControlerState
-
 
     init {
         mLiveData.value = ArrayList()
@@ -37,10 +33,13 @@ class ApiPerformanceViewModel(app:Application, val safeRoom:SafeRoomRepository) 
     fun request() {
 
         mControlerState.value!!.isReady=false
-        mControlerState.postValue(mControlerState.value)
-
         val sentTime = System.currentTimeMillis()
-        var disposable = CachePerformanceTest(PersistantCacheRepository(safeRoom)).getList().subscribe({it->
+        var repo = CachePerformanceTest(if(mControlerState.value!!.isCacheEnable) PersistantCacheRepository(safeRoom) else null)
+
+            val observer = if(mControlerState.value!!.isApiSmall)repo.getTags()else repo.getList()
+
+
+        val disposable = observer.subscribe({it->
 
             val time = (it.raw().receivedResponseAtMillis-sentTime)
             mLiveData.value!!.add(
@@ -48,12 +47,10 @@ class ApiPerformanceViewModel(app:Application, val safeRoom:SafeRoomRepository) 
             )
                 mLiveData.postValue(mLiveData.value)
                 mControlerState.value!!.isReady=true
-                mControlerState.postValue(mControlerState.value)
         },{
             Log.d("error",it.message)
             it.printStackTrace()
             mControlerState.value!!.isReady=true
-            mControlerState.postValue(mControlerState.value)
         })
 
     }
@@ -64,9 +61,29 @@ class ApiPerformanceViewModel(app:Application, val safeRoom:SafeRoomRepository) 
         safeRoom.clear()
     }
 
+    fun clearCache(){
+        safeRoom.clear()
+        mLiveData.value!!.clear()
+        mLiveData.postValue(mLiveData.value)
+
+
+    }
+
 
     fun terminate() {
         safeRoom.close()
+    }
+
+    fun toggleApiSize() {
+        mControlerState.value!!.isApiSmall=!mControlerState.value!!.isApiSmall
+    }
+
+    fun toggleCache() {
+        mControlerState.value!!.isCacheEnable=!mControlerState.value!!.isCacheEnable
+    }
+
+    fun toggleDb() {
+        mControlerState.value!!.isRealm=!mControlerState.value!!.isRealm
     }
 
 

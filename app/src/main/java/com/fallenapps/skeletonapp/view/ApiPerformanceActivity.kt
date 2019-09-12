@@ -31,10 +31,7 @@ class ApiPerformanceActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_api_performance)
-
         apiPerformanceViewModel = ApiPerformanceViewModel.Factory(application,SafeRoomRepository(this,"PASS-PHRASE".toCharArray())).create(ApiPerformanceViewModel::class.java)
-
-
         initialSetup()
     }
 
@@ -44,7 +41,11 @@ class ApiPerformanceActivity : AppCompatActivity(){
         recyclerView.adapter = TestRunAdapter(apiPerformanceViewModel.liveData.value!!)
 
         button_test.setOnClickListener{apiPerformanceViewModel.request()}
+        button_clear.setOnClickListener{apiPerformanceViewModel.clearCache()}
 
+        switch1.setOnCheckedChangeListener{it1,it2->apiPerformanceViewModel.toggleApiSize()}
+        switch2.setOnCheckedChangeListener{it1,it2->apiPerformanceViewModel.toggleCache()}
+        switch3.setOnCheckedChangeListener{it1,it2->apiPerformanceViewModel.toggleDb()}
 
     }
 
