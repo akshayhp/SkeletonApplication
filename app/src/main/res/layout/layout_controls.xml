@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="10dp"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sample api"
+        app:layout_constraintBaseline_toBaselineOf="@id/switch1"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOn="Small"
+        android:textOff="Large"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:text="Cache store"
+
+        app:layout_constraintBaseline_toBaselineOf="@id/switch2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/switch2"/>
+
+    <Switch
+        android:id="@+id/switch2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOn="Db"
+        android:layout_marginTop="10dp"
+
+        android:textOff="OKHttp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/switch1"
+        app:layout_constraintTop_toBottomOf="@id/switch1" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DB Type"
+        app:layout_constraintBaseline_toBaselineOf="@id/switch3"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/switch3" />
+
+    <Switch
+        android:id="@+id/switch3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOn="Realm"
+        android:textOff="SafeRoom"
+        android:layout_marginTop="10dp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/switch2"
+        app:layout_constraintTop_toBottomOf="@id/switch2" />
+
+    <Button
+        android:id="@+id/button_test"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+
+        android:text="Test"
+        app:layout_constraintTop_toBottomOf="@id/textView3"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/horizontal_guid"
+         />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal_guid"
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/textView3"
+        app:layout_constraintGuide_percent="0.50"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/button_clear"
+        android:layout_width="0dp"
+        android:layout_margin="10dp"
+        android:layout_height="wrap_content"
+        android:text="Clear Cache"
+        app:layout_constraintRight_toLeftOf="@id/horizontal_guid"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView3" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

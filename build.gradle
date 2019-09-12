@@ -22,6 +22,8 @@ ext{
     okhttp_version = '4.1.0'
     retrofit_version = "2.6.1"
 
+    room = "2.1.0"
+
     junit_version = "4.12"
 
 }
@@ -31,7 +33,6 @@ buildscript {
     repositories {
         google()
         jcenter()
-
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.0'
@@ -45,6 +46,9 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven {
+            url "https://s3.amazonaws.com/repo.commonsware.com"
+        }
         
     }
 }
