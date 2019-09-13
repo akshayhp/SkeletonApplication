@@ -12,7 +12,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
-class CachePerformanceTest(val persistantRepo:SafeRoomCacheRepository?){
+class CachePerformanceTest(val persistantRepo:CacheRepository?){
 
       private val  retrofitClient:Retrofit by lazy {
 

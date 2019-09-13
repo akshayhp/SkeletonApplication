@@ -8,12 +8,12 @@ import androidx.sqlite.db.SupportSQLiteOpenHelper
 import com.commonsware.cwac.saferoom.SafeHelperFactory
 import com.fallenapps.skeletonapp.model.DataItem
 
-class SafeRoomDB  constructor(val ctxt: Context, val passphrase: CharArray) {
+class SafeRoomDB  constructor(val ctxt: Context) {
 
     private  lateinit var db: SupportSQLiteDatabase
 
     fun open() {
-        val factory = SafeHelperFactory(passphrase)
+        val factory = SafeHelperFactory("PASS-PHRASE".toCharArray())
         val cfgBuilder = SupportSQLiteOpenHelper.Configuration.builder(ctxt)
 
         cfgBuilder
@@ -35,7 +35,7 @@ class SafeRoomDB  constructor(val ctxt: Context, val passphrase: CharArray) {
     }
 
     fun clear(){
-        db.query("DELETE FROM data WHERE 1=1")
+        db.delete("data",  "1=1",null)
     }
 
     fun close() {
@@ -56,8 +56,7 @@ class SafeRoomDB  constructor(val ctxt: Context, val passphrase: CharArray) {
             }
     }
 
-
-        fun save(key: String,value: String): DataItem {
+    fun save(key: String,value: String): DataItem {
             val cv = ContentValues(1)
 
             cv.put("url_key", key)

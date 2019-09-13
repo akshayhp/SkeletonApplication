@@ -1,8 +1,6 @@
 package com.fallenapps.skeletonapp.repository.network
 
-import android.util.Log
 import com.fallenapps.skeletonapp.repository.CacheRepository
-import com.fallenapps.skeletonapp.repository.SafeRoomCacheRepository
 import okhttp3.*
 import java.net.HttpURLConnection
 import okhttp3.ResponseBody.Companion.toResponseBody
@@ -11,7 +9,7 @@ class MyCacheInterceptor private constructor(private val cacheRepository: CacheR
 
 
     companion object{
-        fun create(persistantStorageRepository: SafeRoomCacheRepository?):MyCacheInterceptor{
+        fun create(persistantStorageRepository: CacheRepository?):MyCacheInterceptor{
             return MyCacheInterceptor(persistantStorageRepository)
         }
     }
@@ -21,36 +19,39 @@ class MyCacheInterceptor private constructor(private val cacheRepository: CacheR
         if(cacheRepository == null){
             return connectToNetwork(chain)
         }
+        cacheRepository.open()
 
         val cache = cacheRepository.find(chain.request().url.toString())
-        return  if(cache is CacheRepository.DataResult.Success) {
+        val response  = if(cache is CacheRepository.DataResult.Success) {
              Response.Builder()
                 .request(chain.request())
                 .protocol(Protocol.HTTP_1_1)
                 .code(HttpURLConnection.HTTP_OK)
                 .addHeader("from-cache-source","cache")
                 .message("")
-                .body(cache.value.toResponseBody())
+                .body(cache.body.toResponseBody())
                 .sentRequestAtMillis(-1L)
                 .receivedResponseAtMillis(System.currentTimeMillis())
                 .build()
         }else {
-
             connectToNetwork(chain,true)
        }
+        cacheRepository.close()
+
+        return response
     }
 
     private fun connectToNetwork(chain : Interceptor.Chain, save:Boolean = false) : Response{
         val response = chain.proceed(chain.request())
         val url = chain.request().url.toString()
-        val resBody = ""+response.body!!.string()
+        val resBody = response.body?.string()
         if (save && resBody!=null && resBody.isNotBlank() && response.code == HttpURLConnection.HTTP_OK) {
             cacheRepository?.write(
                 url,
                 resBody
             )
         }
-        return response.newBuilder().addHeader("from-cache-source","online").body(resBody.toResponseBody()).build()
+        return response.newBuilder().addHeader("from-cache-source","online").body(resBody?.toResponseBody()).build()
     }
 
 }

@@ -1,3 +1,6 @@
 package com.fallenapps.skeletonapp.model
 
-data class DataItem(val key:String,val value:String)
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
+
+ open  class DataItem(@PrimaryKey var url:String = "",var body:String = ""):RealmObject()

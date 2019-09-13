@@ -6,22 +6,25 @@ import androidx.lifecycle.*
 import com.fallenapps.skeletonapp.model.ApiResponse
 import com.fallenapps.skeletonapp.model.ControllerModel
 import com.fallenapps.skeletonapp.repository.CachePerformanceTest
-import com.fallenapps.skeletonapp.repository.SafeRoomCacheRepository
+import com.fallenapps.skeletonapp.repository.MyCacheRepository
 import com.fallenapps.skeletonapp.repository.SafeRoomDB
 
 
 
-class ApiPerformanceViewModel(app:Application, val safeRoom:SafeRoomDB) : AndroidViewModel(app) {
+class ApiPerformanceViewModel(app:Application) : AndroidViewModel(app) {
+
+
+     private var myCacheRepository:MyCacheRepository? = null
 
     private val mLiveData: MutableLiveData<ArrayList<ApiResponse>> = MutableLiveData()
-    private val mControlerState = MutableLiveData<ControllerModel>()
+    private val mControllerState = MutableLiveData<ControllerModel>()
 
     val liveData: LiveData<ArrayList<ApiResponse>> = mLiveData
-    val controlerState: LiveData<ControllerModel> = mControlerState
+    val controllerState: LiveData<ControllerModel> = mControllerState
 
     init {
         mLiveData.value = ArrayList()
-        mControlerState.value = ControllerModel(
+        mControllerState.value = ControllerModel(
             isApiSmall = false,
             isCacheEnable = false,
             isRealm = false,
@@ -31,67 +34,71 @@ class ApiPerformanceViewModel(app:Application, val safeRoom:SafeRoomDB) : Androi
 
 
     fun request() {
-        mControlerState.value!!.isReady=false
+        mControllerState.value!!.isReady=false
+        mControllerState.postValue(mControllerState.value)
         val sentTime = System.currentTimeMillis()
-        var repo = CachePerformanceTest(if(mControlerState.value!!.isCacheEnable) SafeRoomCacheRepository(safeRoom) else null)
 
-            val observer = if(mControlerState.value!!.isApiSmall)repo.getTags()else repo.getList()
-
-
+        if(myCacheRepository==null){
+            myCacheRepository = MyCacheRepository(mControllerState.value!!.isRealm,getApplication())
+        }
+        var repo = CachePerformanceTest(if(mControllerState.value!!.isCacheEnable) myCacheRepository else null)
+            val observer = if(mControllerState.value!!.isApiSmall)repo.getTags()else repo.getList()
         val disposable = observer.subscribe({it->
-
             val time = (it.raw().receivedResponseAtMillis-sentTime)
             mLiveData.value!!.add(
                 ApiResponse(it.headers()["from-cache-source"]+"", "${it.body()!!.toByteArray().size}b","$time ms")
             )
-                mLiveData.postValue(mLiveData.value)
-                mControlerState.value!!.isReady=true
+            mLiveData.postValue(mLiveData.value)
+            mControllerState.value!!.isReady=true
+            mControllerState.postValue(mControllerState.value)
+
         },{
-            Log.d("error",it.message)
+            Log.d("error",""+it.message)
             it.printStackTrace()
-            mControlerState.value!!.isReady=true
+            mControllerState.value!!.isReady=true
+            mControllerState.postValue(mControllerState.value)
+
         })
 
     }
 
 
-    fun init() {
-        safeRoom.open()
-        safeRoom.clear()
-    }
 
     fun clearCache(){
-        safeRoom.clear()
+            myCacheRepository = MyCacheRepository(mControllerState.value!!.isRealm,getApplication())
+            myCacheRepository?.open()
+        myCacheRepository?.clear()
+        myCacheRepository?.close()
+
         mLiveData.value!!.clear()
         mLiveData.postValue(mLiveData.value)
-
-
     }
 
 
     fun terminate() {
-        safeRoom.close()
+//        myCacheRepository?.close()
+//        myCacheRepository=null
     }
 
     fun toggleApiSize() {
-        mControlerState.value!!.isApiSmall=!mControlerState.value!!.isApiSmall
+        mControllerState.value!!.isApiSmall=!mControllerState.value!!.isApiSmall
     }
 
     fun toggleCache() {
-        mControlerState.value!!.isCacheEnable=!mControlerState.value!!.isCacheEnable
+        mControllerState.value!!.isCacheEnable=!mControllerState.value!!.isCacheEnable
     }
 
     fun toggleDb() {
-        mControlerState.value!!.isRealm=!mControlerState.value!!.isRealm
+        mControllerState.value!!.isRealm=!mControllerState.value!!.isRealm
     }
 
 
     class Factory(val app: Application, val safeRoom: SafeRoomDB) :
-        ViewModelProvider.NewInstanceFactory() {
+        ViewModelProvider.Factory {
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(ApiPerformanceViewModel::class.java)) {
-                return ApiPerformanceViewModel(app, safeRoom) as T
+                return ApiPerformanceViewModel(app) as T
             }
 
             return modelClass.newInstance()
