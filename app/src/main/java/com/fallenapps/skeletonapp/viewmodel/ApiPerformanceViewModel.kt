@@ -41,8 +41,10 @@ class ApiPerformanceViewModel(app:Application, val safeRoom:SafeRoomDB) : Androi
         val disposable = observer.subscribe({it->
 
             val time = (it.raw().receivedResponseAtMillis-sentTime)
+            val body = it.body()
+            Log.d("response",""+body)
             mLiveData.value!!.add(
-                ApiResponse(it.headers()["from-cache-source"]+"", "${it.body()!!.toByteArray().size}b","$time ms")
+                ApiResponse(it.headers()["from-cache-source"]+"", "${body?.toByteArray()?.size}b","$time ms")
             )
                 mLiveData.postValue(mLiveData.value)
                 mControlerState.value!!.isReady=true
