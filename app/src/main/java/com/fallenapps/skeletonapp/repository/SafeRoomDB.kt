@@ -35,7 +35,7 @@ class SafeRoomDB  constructor(val ctxt: Context, val passphrase: CharArray) {
     }
 
     fun clear(){
-        db.query("DELETE FROM data WHERE 1=1")
+        db.delete("data","1=1",null)
     }
 
     fun close() {

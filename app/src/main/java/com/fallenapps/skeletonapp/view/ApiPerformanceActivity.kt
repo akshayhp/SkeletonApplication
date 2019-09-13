@@ -3,6 +3,7 @@ package com.fallenapps.skeletonapp.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fallenapps.skeletonapp.R
 import com.fallenapps.skeletonapp.model.ControllerModel
@@ -30,7 +31,7 @@ class ApiPerformanceActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_api_performance)
-        apiPerformanceViewModel = ApiPerformanceViewModel.Factory(application,SafeRoomDB(this,"PASS-PHRASE".toCharArray())).create(ApiPerformanceViewModel::class.java)
+        apiPerformanceViewModel = ViewModelProviders.of(this,ApiPerformanceViewModel.Factory(application,SafeRoomDB(this,"PASS-PHRASE".toCharArray()))).get(ApiPerformanceViewModel::class.java)
         initialSetup()
     }
 
