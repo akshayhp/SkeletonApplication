@@ -1,6 +1,5 @@
 package com.fallenapps.skeletonapp.repository.network
 
-import android.util.Log
 import com.fallenapps.skeletonapp.repository.CacheRepository
 import com.fallenapps.skeletonapp.repository.SafeRoomCacheRepository
 import okhttp3.*
@@ -16,7 +15,6 @@ class MyCacheInterceptor private constructor(private val cacheRepository: CacheR
         }
     }
     override fun intercept(chain: Interceptor.Chain): Response {
-
 
         if(cacheRepository == null){
             return connectToNetwork(chain)
@@ -43,7 +41,7 @@ class MyCacheInterceptor private constructor(private val cacheRepository: CacheR
     private fun connectToNetwork(chain : Interceptor.Chain, save:Boolean = false) : Response{
         val response = chain.proceed(chain.request())
         val url = chain.request().url.toString()
-        val resBody = ""+response.body!!.string()
+        val resBody = ""+response.body?.string()
         if (save && resBody!=null && resBody.isNotBlank() && response.code == HttpURLConnection.HTTP_OK) {
             cacheRepository?.write(
                 url,
