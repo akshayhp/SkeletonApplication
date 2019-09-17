@@ -28,29 +28,29 @@ class RealmDb{
 
     fun open() {
 
-        Single.just("").observeOn(Schedulers.io()).map {         db = Realm.getInstance(config)
-        }.subscribe()
+        db = Realm.getInstance(config)
     }
 
     fun clear(){
-        Single.just("").observeOn(Schedulers.io()).map {                 db.executeTransaction{db.deleteAll()}
-
-        }.subscribe()
+                         db.executeTransaction{db.deleteAll()}
     }
 
     fun close() {
         if (!db.isClosed)
-            Single.just("").observeOn(Schedulers.io()).map {                 db.close()}.subscribe()
+                             db.close()
 
     }
 
     fun find(url:String): DataItem? {
-      return db.where(DataItem::class.java).contains("key", url).findFirst()
+      return db.where(DataItem::class.java).contains("url", url).findFirst()
     }
 
     fun save(key: String,value: String): DataItem {
         val di = DataItem(key, value)
-         db.insertOrUpdate(di)
+         db.executeTransaction{
+             it.insertOrUpdate(di)
+
+         }
         return di
         }
 

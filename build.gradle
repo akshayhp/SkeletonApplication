@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 ext{
 
-    app_id = "com.fallenapps.skeletonapplication"
+    app_id = "com.fallenapps.skeletonapplicationrealm"
     app_version = "1.0.0"
     app_code = 1
 
